@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:savings_calculator/models/product.dart';
+import 'package:savings_calculator/screens/result_page.dart';
+import 'package:savings_calculator/widget/custom_app_bar.dart';
+
+import '../data/data_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -9,39 +15,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
-  TextEditingController timeleftController = TextEditingController();
-  TextEditingController amountController = TextEditingController();
-  String? price = '0';
+  TextEditingController nameController = TextEditingController(text: '');
+  TextEditingController priceController = TextEditingController(text: '');
+  TextEditingController timeleftController = TextEditingController(text: '');
+  TextEditingController amountController = TextEditingController(text: '');
   static const _locale = 'id';
   String _formatNumber(String s) =>
       NumberFormat.decimalPattern(_locale).format(int.parse(s));
   String get _currency =>
       NumberFormat.compactSimpleCurrency(locale: _locale).currencySymbol;
+  final dataController = Get.find<DataController>();
+  String valueTest = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Text(
-            'Savings Calculator',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
-            ),
-          ),
-        ),
-        backgroundColor: Colors.teal[50],
-      ),
+      appBar: const CustomAppBar(name: 'Savings Calculator'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Row(),
@@ -169,7 +161,15 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                dataController.product.value = Product(
+                  name: nameController.text,
+                  price: priceController.text.replaceAll('.', ''),
+                  amount: amountController.text.replaceAll('.', ''),
+                  month: int.parse(timeleftController.text),
+                );
+                Get.to(() => const ResultPage());
+              },
               style: ElevatedButton.styleFrom(
                 shape: const StadiumBorder(),
                 backgroundColor: Colors.teal,
