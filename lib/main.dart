@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(DataController());
     return GetMaterialApp(
+      title: 'Savings Calculator',
       home: const HomePage(),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
